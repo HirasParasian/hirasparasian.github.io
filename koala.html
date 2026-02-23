@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#9CCF9A" />
+  <title>Koala Links</title>
+
+  <style>
+    :root{
+      --bg-0:#0f1418; --bg-1:#161d22;
+      --card:rgba(255,255,255,.07); --card-2:rgba(255,255,255,.10);
+      --border:rgba(255,255,255,.12);
+      --text:#EEF2F6; --muted:rgba(238,242,246,.78);
+
+      --koala:#AEB5BC; --koala-deep:#5B6168; --coal:#2E3136;
+      --euca:#9CCF9A; --euca-deep:#2E8B57;
+      --blossom:#F7C7D0; --honey:#F3D36B;
+
+      --shadow:0 18px 50px rgba(0,0,0,.45);
+      --radius:26px;
+
+      --btn:rgba(255,255,255,.10);
+      --btnHover:rgba(255,255,255,.16);
+
+      --ring:0 0 0 4px rgba(156,207,154,.22);
+      --maxw:780px;
+    }
+
+    [data-theme="light"]{
+      --bg-0:#F5F7FA; --bg-1:#EEF2F6;
+      --card:rgba(255,255,255,.85); --card-2:rgba(255,255,255,.92);
+      --border:rgba(46,49,54,.12);
+      --text:#1c2228; --muted:rgba(28,34,40,.70);
+      --shadow:0 18px 50px rgba(16,24,32,.15);
+      --btn:rgba(28,34,40,.06); --btnHover:rgba(28,34,40,.10);
+      --ring:0 0 0 4px rgba(46,139,87,.18);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 18% 12%, rgba(156,207,154,.30), transparent 55%),
+        radial-gradient(900px 700px at 82% 18%, rgba(247,199,208,.24), transparent 56%),
+        radial-gradient(900px 700px at 64% 84%, rgba(243,211,107,.16), transparent 62%),
+        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:-40px;
+      pointer-events:none;
+      opacity:.55;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,.10) 0 2px, transparent 3px),
+        radial-gradient(circle at 70% 20%, rgba(255,255,255,.08) 0 1.8px, transparent 3px),
+        radial-gradient(circle at 45% 75%, rgba(255,255,255,.08) 0 2.2px, transparent 3px),
+        radial-gradient(circle at 88% 65%, rgba(255,255,255,.06) 0 2px, transparent 3px);
+      background-size: 140px 140px, 170px 170px, 150px 150px, 190px 190px;
+      filter: blur(.2px);
+    }
+
+    .leaf{
+      position:fixed;
+      width:18px;height:46px;
+      background: linear-gradient(180deg, rgba(156,207,154,.95), rgba(46,139,87,.75));
+      border-radius:999px;
+      opacity:.18;
+      filter: blur(.2px);
+      box-shadow:0 18px 30px rgba(0,0,0,.18);
+      transform: rotate(18deg);
+      animation: floaty 10s ease-in-out infinite;
+      pointer-events:none;
+    }
+    .leaf::after{
+      content:"";
+      position:absolute;
+      left:50%; top:10%;
+      width:2px; height:80%;
+      background: rgba(255,255,255,.25);
+      transform: translateX(-50%);
+      border-radius:999px;
+    }
+    .leaf.l1{ left:10%; top:18%; animation-duration:11s; }
+    .leaf.l2{ left:84%; top:22%; animation-duration:13s; transform: rotate(-22deg); }
+    .leaf.l3{ left:18%; top:78%; animation-duration:14s; transform: rotate(32deg); }
+    .leaf.l4{ left:92%; top:74%; animation-duration:12s; transform: rotate(12deg); }
+    @keyframes floaty{
+      0%,100%{ transform: translateY(0) rotate(var(--r,18deg)); }
+      50%{ transform: translateY(-14px) rotate(calc(var(--r,18deg) + 6deg)); }
+    }
+
+    .wrap{
+      width: min(var(--maxw), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 52px;
+      position:relative;
+      z-index:1;
+    }
+
+    header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .brand{ display:flex; align-items:center; gap:12px; min-width:0; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 24px rgba(0,0,0,.14);
+      backdrop-filter: blur(10px);
+    }
+    .badge b{ font-size:13px; letter-spacing:.2px; white-space:nowrap; }
+    .dot{
+      width:10px;height:10px;border-radius:999px;
+      background: var(--euca);
+      box-shadow: 0 0 0 4px rgba(156,207,154,.18);
+      flex: 0 0 auto;
+    }
+
+    .actions{ display:flex; align-items:center; gap:10px; }
+
+    .icon-btn{
+      width:44px;height:44px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      box-shadow:0 10px 22px rgba(0,0,0,.18);
+      backdrop-filter: blur(10px);
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .icon-btn:hover{ background: var(--card-2); transform: translateY(-1px); }
+    .icon-btn:active{ transform: translateY(0) scale(.98); }
+    .icon-btn:focus{ outline:none; box-shadow: var(--shadow), var(--ring); }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.06));
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+      overflow:hidden;
+      position:relative;
+    }
+    .card::before{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(156,207,154,.25), transparent 55%),
+        radial-gradient(circle at 80% 10%, rgba(247,199,208,.20), transparent 55%),
+        radial-gradient(circle at 70% 80%, rgba(243,211,107,.13), transparent 60%);
+      transform: rotate(12deg);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    .hero{
+      padding: 26px 22px 18px;
+      display:grid;
+      grid-template-columns: 120px 1fr;
+      gap: 18px;
+      position:relative;
+      z-index:1;
+    }
+    @media (max-width: 560px){
+      .hero{ grid-template-columns: 1fr; text-align:center; justify-items:center; }
+    }
+
+    .avatar{
+      width: 120px; height: 120px;
+      border-radius: 26px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.08);
+      display:grid;
+      place-items:center;
+      position:relative;
+      overflow:hidden;
+      box-shadow: 0 16px 30px rgba(0,0,0,.20);
+    }
+    .avatar::after{
+      content:"";
+      position:absolute;
+      inset:-40px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.12), transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(255,255,255,.08), transparent 60%);
+      transform: rotate(15deg);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    .title{
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap: 8px;
+      min-width:0;
+    }
+    .name{
+      font-size: 26px;
+      letter-spacing: .2px;
+      margin:0;
+      line-height:1.15;
+    }
+    .bio{
+      margin:0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height:1.55;
+    }
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size: 12px;
+      user-select:none;
+    }
+
+    .links{
+      padding: 10px 18px 20px;
+      position:relative;
+      z-index:1;
+    }
+
+    .section-title{
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform:uppercase;
+      color: var(--muted);
+      margin: 10px 6px 12px;
+      display:flex;
+      align-items:center;
+      gap: 10px;
+    }
+    .section-title::after{
+      content:"";
+      height:1px;
+      flex: 1;
+      background: linear-gradient(90deg, rgba(255,255,255,.22), transparent);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media (max-width: 640px){ .grid{ grid-template-columns: 1fr; } }
+
+    .link{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 14px 14px;
+      border-radius: 18px;
+      background: var(--btn);
+      border: 1px solid var(--border);
+      color: var(--text);
+      text-decoration:none;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease, box-shadow .15s ease;
+      position:relative;
+      overflow:hidden;
+    }
+
+    .link::before{
+      content:"";
+      position:absolute;
+      inset:-60px;
+      background: radial-gradient(circle at 20% 20%, rgba(156,207,154,.20), transparent 55%);
+      transform: rotate(10deg);
+      opacity:0;
+      transition: opacity .2s ease;
+      pointer-events:none;
+    }
+    .link:hover{
+      background: var(--btnHover);
+      transform: translateY(-2px);
+      box-shadow: 0 16px 28px rgba(0,0,0,.18);
+      border-color: rgba(156,207,154,.35);
+    }
+    .link:hover::before{ opacity:1; }
+
+    .link-left{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width:0;
+    }
+    .pill{
+      width: 42px; height: 42px;
+      border-radius: 16px;
+      display:grid;
+      place-items:center;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,.08);
+      flex: 0 0 auto;
+    }
+    .link-text{
+      display:flex;
+      flex-direction:column;
+      gap: 2px;
+      min-width:0;
+    }
+    .link-text b{
+      font-size: 14px;
+      letter-spacing: .2px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .link-text span{
+      font-size: 12px;
+      color: var(--muted);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .chev{
+      opacity:.75;
+      flex: 0 0 auto;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+    .link:hover .chev{ transform: translateX(2px); opacity:1; }
+
+    .link.featured{
+      border-color: rgba(247,199,208,.40);
+      background:
+        radial-gradient(circle at 12% 20%, rgba(247,199,208,.22), transparent 55%),
+        radial-gradient(circle at 80% 30%, rgba(156,207,154,.18), transparent 60%),
+        var(--btn);
+    }
+    .tag{
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(247,199,208,.22);
+      border: 1px solid rgba(247,199,208,.35);
+      color: var(--text);
+      margin-left: 8px;
+      vertical-align: middle;
+      white-space:nowrap;
+    }
+
+    footer{
+      margin-top: 14px;
+      text-align:center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height:1.6;
+    }
+
+    .toast{
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.65);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.14);
+      padding: 10px 12px;
+      border-radius: 999px;
+      box-shadow: 0 16px 30px rgba(0,0,0,.35);
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .2s ease, transform .2s ease;
+      backdrop-filter: blur(8px);
+      z-index: 50;
+      font-size: 13px;
+    }
+    [data-theme="light"] .toast{ background: rgba(28,34,40,.82); }
+    .toast.show{ opacity:1; transform: translateX(-50%) translateY(-3px); }
+  </style>
+</head>
+
+<body data-theme="dark">
+  <div class="leaf l1" style="--r:18deg"></div>
+  <div class="leaf l2" style="--r:-22deg"></div>
+  <div class="leaf l3" style="--r:32deg"></div>
+  <div class="leaf l4" style="--r:12deg"></div>
+
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="badge" title="Status">
+          <span class="dot" aria-hidden="true"></span>
+          <b>Koala vibes • online</b>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="icon-btn" id="btnTheme" type="button" aria-label="Toggle theme">
+          <svg id="iconTheme" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M21 12.2A8.2 8.2 0 1 1 11.8 3a6.7 6.7 0 0 0 9.2 9.2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+
+        <button class="icon-btn" id="btnCopy" type="button" aria-label="Copy page link">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M10 13a5 5 0 0 0 7.07 0l1.42-1.42a5 5 0 0 0-7.07-7.07L10.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M14 11a5 5 0 0 0-7.07 0L5.5 12.43a5 5 0 1 0 7.07 7.07L13.5 19" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="card" role="main">
+      <section class="hero">
+        <div class="avatar" aria-label="Koala avatar">
+          <svg width="86" height="86" viewBox="0 0 120 120" fill="none" aria-hidden="true">
+            <circle cx="32" cy="40" r="22" fill="var(--koala)"/>
+            <circle cx="88" cy="40" r="22" fill="var(--koala)"/>
+            <circle cx="32" cy="40" r="12" fill="rgba(255,255,255,.25)"/>
+            <circle cx="88" cy="40" r="12" fill="rgba(255,255,255,.25)"/>
+            <circle cx="60" cy="62" r="38" fill="var(--koala)"/>
+            <circle cx="41" cy="73" r="7" fill="rgba(247,199,208,.35)"/>
+            <circle cx="79" cy="73" r="7" fill="rgba(247,199,208,.35)"/>
+            <circle cx="47" cy="62" r="5" fill="var(--coal)"/>
+            <circle cx="73" cy="62" r="5" fill="var(--coal)"/>
+            <circle cx="45.5" cy="60.5" r="1.5" fill="white" opacity=".9"/>
+            <circle cx="71.5" cy="60.5" r="1.5" fill="white" opacity=".9"/>
+            <path d="M60 66c-8 0-14 6-14 13 0 9 8 16 14 16s14-7 14-16c0-7-6-13-14-13Z" fill="var(--koala-deep)"/>
+            <path d="M60 72c-4 0-7 3-7 6 0 4 4 7 7 7s7-3 7-7c0-3-3-6-7-6Z" fill="var(--coal)"/>
+            <path d="M54.5 74.5c1.5-1.2 3.4-2 5.5-2" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M96 84c-6 0-10 5-10 10 6 0 10-5 10-10Z" fill="var(--euca)"/>
+            <path d="M86 94c6 0 10-5 10-10" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </div>
+
+        <div class="title">
+          <h1 class="name">Hiras Parasian <span class="tag">Koala Theme</span></h1>
+          <p class="bio">
+            An Engineer | Gamer | Bookworm. Aku suka ngerangkum hal kecil jadi kutipan singkat—buat diingat, bukan buat sempurna. ✍️
+          </p>
+
+          <div class="chips" aria-label="Highlights">
+            <span class="chip" title="Lokasi">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 22s7-4.4 7-12a7 7 0 1 0-14 0c0 7.6 7 12 7 12Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12 10.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Jakarta • ID
+            </span>
+
+            <span class="chip" title="Kontak">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              hirasdummy@gmail.com
+            </span>
+
+            <span class="chip" title="Mood">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 2l1.2 5.3L18 9l-4.8 1.7L12 16l-1.2-5.3L6 9l4.8-1.7L12 2Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M19 14l.6 2.6L22 18l-2.4.8L19 21l-.6-2.2L16 18l2.4-1.4L19 14Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              chill & cozy
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <section class="links">
+        <div class="section-title">LINK UTAMA</div>
+
+        <div class="grid">
+          <a class="link featured" href="https://example.com/portfolio" target="_blank" rel="noopener">
+            <div class="link-left">
+              <span class="pill" aria-hidden="true">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 7V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                  <path d="M4 7h16v13H4V7Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M4 12h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <div class="link-text">
+                <b>Portfolio <span class="tag" style="background: rgba(156,207,154,.20); border-color: rgba(156,207,154,.35);">featured</span></b>
+                <span>Project, CV, dan case study</span>
+              </div>
+            </div>
+            <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+
+          <a class="link" href="https://www.capcut.com/hiraspds" target="_blank" rel="noopener">
+            <div class="link-left">
+              <span class="pill" aria-hidden="true">
+                <!-- film -->
+                <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 509.659"><path fill="#fff" d="M116.971 2.475h278.058c62.971 0 114.494 51.522 114.494 114.494v275.722c0 62.971-51.523 114.493-114.494 114.493H116.971c-62.972 0-114.494-51.522-114.494-114.493V116.969c0-62.972 51.522-114.494 114.494-114.494z"/><path fill="#999" fill-rule="nonzero" d="M116.97-.001h278.06C459.366-.001 512 52.633 512 116.969v275.722c0 64.335-52.634 116.969-116.97 116.969H116.97C52.636 509.66 0 457.026 0 392.691V116.969C0 52.633 52.636-.001 116.97-.001zm278.06 4.953H116.97C55.364 4.952 4.953 55.363 4.953 116.969v275.722c0 61.605 50.411 112.017 112.017 112.017h278.06c61.607 0 112.017-50.411 112.017-112.017V116.969c0-61.607-50.41-112.017-112.017-112.017z"/><path fill="#fff" fill-rule="nonzero" d="M109.095 181.505c-.123 8.897 0 17.813 0 26.71a5.41 5.41 0 003.225 4.917 23898.407 23898.407 0 0084.108 41.646c-27.832 13.672-55.563 27.526-83.353 41.259a5.938 5.938 0 00-4.081 4.876v26.771c1.854 18.195 15.823 32.817 33.913 35.503 3.509.326 7.02.266 10.529.266l155.85.001a45.08 45.08 0 0011.224-.92 40.825 40.825 0 0026.137-20.015 63.699 63.699 0 004.288-11.226c15.997 8.325 32.341 16.079 48.462 24.179.385.291.857.447 1.343.447a2.266 2.266 0 002.265-2.265v-.016-27.669a4.695 4.695 0 00-3.143-4.079l-135.323-67.112c45.203-22.431 90.412-44.876 135.63-67.335a4.573 4.573 0 002.754-4.082v-27.628a2.183 2.183 0 00-3.142-1.673l-49.135 24.363a42.189 42.189 0 00-6.388-14.917 40.613 40.613 0 00-30.097-17.422l-167.133-.001c-19.615.91-35.688 15.918-37.933 35.424v-.002z"/><path fill="#fff" fill-rule="nonzero" d="M140.049 181.689a10.082 10.082 0 019.345-5.55h161.545l.106-.001c5.066 0 9.368 3.72 10.096 8.734.205 2.714.102 5.428 0 8.162l-90.597 44.891c-30.608-15.018-61.03-30.22-91.535-45.339.142-3.632-.633-7.53 1.04-10.897zM139.009 317.095a24846.007 24846.007 0 0191.351-45.319c30.322 14.773 60.521 29.954 90.802 44.89-.204 3.918.755 8.162-1.305 11.773a10.085 10.085 0 01-8.755 5.08h-.082l-161.605.002-.277.002a10.202 10.202 0 01-9.007-5.411c-1.796-3.386-.98-7.345-1.122-11.017z"/><path fill-rule="nonzero" d="M109.095 181.505c2.223-19.532 18.316-34.578 37.955-35.483l167.194-.001a40.612 40.612 0 0130.095 17.427 42.152 42.152 0 016.39 14.915l49.135-24.364a2.185 2.185 0 013.141 1.674v27.628l.001.096a4.571 4.571 0 01-2.837 4.229 177620.936 177620.936 0 00-135.63 67.336l135.324 66.948a4.695 4.695 0 013.142 4.08v27.685a2.266 2.266 0 01-3.613 1.821c-16.12-8.162-32.464-15.854-48.462-24.18a63.503 63.503 0 01-4.282 11.225 40.813 40.813 0 01-26.098 20.135 44.994 44.994 0 01-11.221.919l-155.833.003c-3.51 0-7.04 0-10.53-.266-18.089-2.705-32.049-17.363-33.869-35.565v-26.77a5.935 5.935 0 014.08-4.879c27.791-13.732 55.521-27.587 83.353-41.258a32412.61 32412.61 0 00-84.17-41.748 5.41 5.41 0 01-3.223-4.918c-.042-8.876-.185-17.792-.042-26.689zm30.975.184c-1.674 3.367-.898 7.263-1.041 10.896 30.608 15.12 60.99 30.321 91.536 45.339 30.185-14.963 60.384-29.927 90.596-44.89 0-2.714.123-5.428 0-8.162a10.203 10.203 0 00-10.096-8.734h-.106l-161.565.001a10.082 10.082 0 00-9.345 5.55h.021zm-1.041 135.406c.142 3.673-.654 7.631 1.122 11.039a10.204 10.204 0 009.284 5.405l161.667.002.081-.001c3.618 0 6.961-1.94 8.754-5.081 2.04-3.57 1.102-7.855 1.305-11.773-30.26-14.936-60.48-30.118-90.801-44.89a43915.126 43915.126 0 00-91.432 45.299h.02z"/></svg>
+              </span>
+              <div class="link-text">
+                <b>CapCut</b>
+                <span>Editing & template video</span>
+              </div>
+            </div>
+            <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        </div>
+
+        <div class="section-title" style="margin-top:16px;">SOSIAL</div>
+
+        <div class="grid">
+          <a class="link" href="https://instagram.com/hiras.pds" target="_blank" rel="noopener">
+            <div class="link-left">
+              <span class="pill" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 132.004 132"><defs><linearGradient id="b"><stop offset="0" stop-color="#3771c8"/><stop stop-color="#3771c8" offset=".128"/><stop offset="1" stop-color="#60f" stop-opacity="0"/></linearGradient><linearGradient id="a"><stop offset="0" stop-color="#fd5"/><stop offset=".1" stop-color="#fd5"/><stop offset=".5" stop-color="#ff543e"/><stop offset="1" stop-color="#c837ab"/></linearGradient><radialGradient id="c" cx="158.429" cy="578.088" r="65" xlink:href="#a" gradientUnits="userSpaceOnUse" gradientTransform="matrix(0 -1.98198 1.8439 0 -1031.402 454.004)" fx="158.429" fy="578.088"/><radialGradient id="d" cx="147.694" cy="473.455" r="65" xlink:href="#b" gradientUnits="userSpaceOnUse" gradientTransform="matrix(.17394 .86872 -3.5818 .71718 1648.348 -458.493)" fx="147.694" fy="473.455"/></defs><path fill="url(#c)" d="M65.03 0C37.888 0 29.95.028 28.407.156c-5.57.463-9.036 1.34-12.812 3.22-2.91 1.445-5.205 3.12-7.47 5.468C4 13.126 1.5 18.394.595 24.656c-.44 3.04-.568 3.66-.594 19.188-.01 5.176 0 11.988 0 21.125 0 27.12.03 35.05.16 36.59.45 5.42 1.3 8.83 3.1 12.56 3.44 7.14 10.01 12.5 17.75 14.5 2.68.69 5.64 1.07 9.44 1.25 1.61.07 18.02.12 34.44.12 16.42 0 32.84-.02 34.41-.1 4.4-.207 6.955-.55 9.78-1.28 7.79-2.01 14.24-7.29 17.75-14.53 1.765-3.64 2.66-7.18 3.065-12.317.088-1.12.125-18.977.125-36.81 0-17.836-.04-35.66-.128-36.78-.41-5.22-1.305-8.73-3.127-12.44-1.495-3.037-3.155-5.305-5.565-7.624C116.9 4 111.64 1.5 105.372.596 102.335.157 101.73.027 86.19 0H65.03z" transform="translate(1.004 1)"/><path fill="url(#d)" d="M65.03 0C37.888 0 29.95.028 28.407.156c-5.57.463-9.036 1.34-12.812 3.22-2.91 1.445-5.205 3.12-7.47 5.468C4 13.126 1.5 18.394.595 24.656c-.44 3.04-.568 3.66-.594 19.188-.01 5.176 0 11.988 0 21.125 0 27.12.03 35.05.16 36.59.45 5.42 1.3 8.83 3.1 12.56 3.44 7.14 10.01 12.5 17.75 14.5 2.68.69 5.64 1.07 9.44 1.25 1.61.07 18.02.12 34.44.12 16.42 0 32.84-.02 34.41-.1 4.4-.207 6.955-.55 9.78-1.28 7.79-2.01 14.24-7.29 17.75-14.53 1.765-3.64 2.66-7.18 3.065-12.317.088-1.12.125-18.977.125-36.81 0-17.836-.04-35.66-.128-36.78-.41-5.22-1.305-8.73-3.127-12.44-1.495-3.037-3.155-5.305-5.565-7.624C116.9 4 111.64 1.5 105.372.596 102.335.157 101.73.027 86.19 0H65.03z" transform="translate(1.004 1)"/><path fill="#fff" d="M66.004 18c-13.036 0-14.672.057-19.792.29-5.11.234-8.598 1.043-11.65 2.23-3.157 1.226-5.835 2.866-8.503 5.535-2.67 2.668-4.31 5.346-5.54 8.502-1.19 3.053-2 6.542-2.23 11.65C18.06 51.327 18 52.964 18 66s.058 14.667.29 19.787c.235 5.11 1.044 8.598 2.23 11.65 1.227 3.157 2.867 5.835 5.536 8.503 2.667 2.67 5.345 4.314 8.5 5.54 3.054 1.187 6.543 1.996 11.652 2.23 5.12.233 6.755.29 19.79.29 13.037 0 14.668-.057 19.788-.29 5.11-.234 8.602-1.043 11.656-2.23 3.156-1.226 5.83-2.87 8.497-5.54 2.67-2.668 4.31-5.346 5.54-8.502 1.18-3.053 1.99-6.542 2.23-11.65.23-5.12.29-6.752.29-19.788 0-13.036-.06-14.672-.29-19.792-.24-5.11-1.05-8.598-2.23-11.65-1.23-3.157-2.87-5.835-5.54-8.503-2.67-2.67-5.34-4.31-8.5-5.535-3.06-1.187-6.55-1.996-11.66-2.23-5.12-.233-6.75-.29-19.79-.29zm-4.306 8.65c1.278-.002 2.704 0 4.306 0 12.816 0 14.335.046 19.396.276 4.68.214 7.22.996 8.912 1.653 2.24.87 3.837 1.91 5.516 3.59 1.68 1.68 2.72 3.28 3.592 5.52.657 1.69 1.44 4.23 1.653 8.91.23 5.06.28 6.58.28 19.39s-.05 14.33-.28 19.39c-.214 4.68-.996 7.22-1.653 8.91-.87 2.24-1.912 3.835-3.592 5.514-1.68 1.68-3.275 2.72-5.516 3.59-1.69.66-4.232 1.44-8.912 1.654-5.06.23-6.58.28-19.396.28-12.817 0-14.336-.05-19.396-.28-4.68-.216-7.22-.998-8.913-1.655-2.24-.87-3.84-1.91-5.52-3.59-1.68-1.68-2.72-3.276-3.592-5.517-.657-1.69-1.44-4.23-1.653-8.91-.23-5.06-.276-6.58-.276-19.398s.046-14.33.276-19.39c.214-4.68.996-7.22 1.653-8.912.87-2.24 1.912-3.84 3.592-5.52 1.68-1.68 3.28-2.72 5.52-3.592 1.692-.66 4.233-1.44 8.913-1.655 4.428-.2 6.144-.26 15.09-.27zm29.928 7.97c-3.18 0-5.76 2.577-5.76 5.758 0 3.18 2.58 5.76 5.76 5.76 3.18 0 5.76-2.58 5.76-5.76 0-3.18-2.58-5.76-5.76-5.76zm-25.622 6.73c-13.613 0-24.65 11.037-24.65 24.65 0 13.613 11.037 24.645 24.65 24.645C79.617 90.645 90.65 79.613 90.65 66S79.616 41.35 66.003 41.35zm0 8.65c8.836 0 16 7.163 16 16 0 8.836-7.164 16-16 16-8.837 0-16-7.164-16-16 0-8.837 7.163-16 16-16z"/></svg>
+              </span>
+              <div class="link-text"><b>Instagram</b><span>@hiras.pds</span></div>
+            </div>
+            <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+
+          <a class="link" href="https://github.com/" target="_blank" rel="noopener">
+            <div class="link-left">
+              <span class="pill" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 640 640"><path d="M319.988 7.973C143.293 7.973 0 151.242 0 327.96c0 141.392 91.678 261.298 218.826 303.63 16.004 2.964 21.886-6.957 21.886-15.414 0-7.63-.319-32.835-.449-59.552-89.032 19.359-107.8-37.772-107.8-37.772-14.552-36.993-35.529-46.831-35.529-46.831-29.032-19.879 2.209-19.442 2.209-19.442 32.126 2.245 49.04 32.954 49.04 32.954 28.56 48.922 74.883 34.76 93.131 26.598 2.882-20.681 11.15-34.807 20.315-42.803-71.08-8.067-145.797-35.516-145.797-158.14 0-34.926 12.52-63.485 32.965-85.88-3.33-8.078-14.291-40.606 3.083-84.674 0 0 26.87-8.61 88.029 32.8 25.512-7.075 52.878-10.642 80.056-10.76 27.2.118 54.614 3.673 80.162 10.76 61.076-41.386 87.922-32.8 87.922-32.8 17.398 44.08 6.485 76.631 3.154 84.675 20.516 22.394 32.93 50.953 32.93 85.879 0 122.907-74.883 149.93-146.117 157.856 11.481 9.921 21.733 29.398 21.733 59.233 0 42.792-.366 77.28-.366 87.804 0 8.516 5.764 18.473 21.992 15.354 127.076-42.354 218.637-162.274 218.637-303.582 0-176.695-143.269-319.988-320-319.988l-.023.107z"/></svg>
+              </span>
+              <div class="link-text"><b>GitHub</b><span>@hirasparasian</span></div>
+            </div>
+            <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+
+          <a class="link" href="https://www.threads.net/hiras.pds" target="_blank" rel="noopener">
+            <div class="link-left">
+              <span class="pill" aria-hidden="true">
+                <!-- chat -->
+                <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 512"><path d="M105 0h302c57.75 0 105 47.25 105 105v302c0 57.75-47.25 105-105 105H105C47.25 512 0 464.75 0 407V105C0 47.25 47.25 0 105 0z"/><path fill="#fff" fill-rule="nonzero" d="M337.36 243.58c-1.46-.7-2.95-1.38-4.46-2.02-2.62-48.36-29.04-76.05-73.41-76.33-25.6-.17-48.52 10.27-62.8 31.94l24.4 16.74c10.15-15.4 26.08-18.68 37.81-18.68h.4c14.61.09 25.64 4.34 32.77 12.62 5.19 6.04 8.67 14.37 10.39 24.89-12.96-2.2-26.96-2.88-41.94-2.02-42.18 2.43-69.3 27.03-67.48 61.21.92 17.35 9.56 32.26 24.32 42.01 12.48 8.24 28.56 12.27 45.26 11.35 22.07-1.2 39.37-9.62 51.45-25.01 9.17-11.69 14.97-26.84 17.53-45.92 10.51 6.34 18.3 14.69 22.61 24.73 7.31 17.06 7.74 45.1-15.14 67.96-20.04 20.03-44.14 28.69-80.55 28.96-40.4-.3-70.95-13.26-90.81-38.51-18.6-23.64-28.21-57.79-28.57-101.5.36-43.71 9.97-77.86 28.57-101.5 19.86-25.25 50.41-38.21 90.81-38.51 40.68.3 71.76 13.32 92.39 38.69 10.11 12.44 17.73 28.09 22.76 46.33l28.59-7.63c-6.09-22.45-15.67-41.8-28.72-57.85-26.44-32.53-65.1-49.19-114.92-49.54h-.2c-49.72.35-87.96 17.08-113.64 49.73-22.86 29.05-34.65 69.48-35.04 120.16v.24c.39 50.68 12.18 91.11 35.04 120.16 25.68 32.65 63.92 49.39 113.64 49.73h.2c44.2-.31 75.36-11.88 101.03-37.53 33.58-33.55 32.57-75.6 21.5-101.42-7.94-18.51-23.08-33.55-43.79-43.48zm-76.32 71.76c-18.48 1.04-37.69-7.26-38.64-25.03-.7-13.18 9.38-27.89 39.78-29.64 3.48-.2 6.9-.3 10.25-.3 11.04 0 21.37 1.07 30.76 3.13-3.5 43.74-24.04 50.84-42.15 51.84z"/></svg>
+              </span>
+              <div class="link-text"><b>Threads</b><span>@hiras.pds</span></div>
+            </div>
+            <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+
+          <a class="link" href="https://tiktok.com/" target="_blank" rel="noopener">
+            <div class="link-left">
+              <span class="pill" aria-hidden="true">
+                <!-- music note -->
+                <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 461 512.235"><g fill-rule="nonzero"><path fill="#2DCCD3" d="M370.934 98.964c19.378 19.981 43.543 32.158 67.898 37.7v-15.005c-22.884-1.621-46.823-8.822-67.898-22.695zM230.952 0v335.533c0 43.959-31.593 72.234-70.009 72.234-12.743 0-24.844-2.978-35.363-8.483 13.346 17.041 34.421 26.843 57.531 26.843 38.417 0 70.01-28.275 70.01-72.272V18.322h60.886C312.348 12.479 310.99 6.371 309.934 0h-78.982zM181 195.062v-16.627c-7.691-1.281-15.382-1.696-21.753-1.696C72.573 176.739 0 246.296 0 332.555c0 56.626 27.559 105.033 69.444 133.685-29.18-28.953-47.276-69.481-47.276-115.362 0-86.109 72.347-155.628 158.832-155.816z"/><path fill="#F1204A" d="M318.87 329.991c0 107.144-81.96 163.921-159.209 163.921-33.44 0-64.505-10.103-90.217-27.672 28.879 28.652 68.616 45.995 112.385 45.995 77.248 0 159.208-56.777 159.208-163.921V173.723c-7.69-5.203-15.08-11.272-22.167-18.36v174.628zm-193.289 69.294c-9.426-11.914-15.043-27.334-15.043-45.43 0-50.782 39.698-77.624 92.629-72.045v-85.052c-7.69-1.282-15.381-1.697-21.79-1.697H181v68.389c-52.931-5.542-92.63 21.263-92.63 72.083 0 29.707 15.193 52.252 37.211 63.752zm313.251-262.621v63.525c-35.174 0-68.464-6.711-97.795-26.466 34.157 34.157 75.59 44.826 119.963 44.826v-78.567a137.713 137.713 0 01-22.168-3.318zm-67.898-37.701c-18.737-19.265-33.026-45.806-38.832-80.641h-18.095c10.329 37.663 31.592 63.94 56.927 80.641z"/><path d="M159.661 493.912c77.248 0 159.209-56.777 159.209-163.921V155.364c7.088 7.087 14.477 13.157 22.168 18.359 29.33 19.755 62.62 26.466 97.794 26.466v-63.525c-24.354-5.542-48.52-17.72-67.898-37.7-25.335-16.702-46.597-42.979-56.928-80.641H253.12v335.533c0 43.996-31.593 72.271-70.009 72.271-23.111 0-44.185-9.801-57.531-26.842-22.017-11.499-37.21-34.044-37.21-63.751 0-50.821 39.698-77.626 92.63-72.084v-68.388c-86.485.189-158.832 69.708-158.832 155.815 0 45.882 18.096 86.409 47.277 115.363 25.711 17.569 56.776 27.672 90.216 27.672z"/></g></svg>
+              </span>
+              <div class="link-text"><b>TikTok</b><span>@hirasparasian</span></div>
+            </div>
+            <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+
+          
+          <a class="link" href="https://youtube.com/" target="_blank" rel="noopener">
+            <div class="link-left">
+              <span class="pill" aria-hidden="true">
+                <!-- play -->
+                <svg xmlns="http://www.w3.org/2000/svg" shape-rendering="geometricPrecision" text-rendering="geometricPrecision" image-rendering="optimizeQuality" fill-rule="evenodd" clip-rule="evenodd" viewBox="0 0 512 512"><g fill-rule="nonzero"><path fill="red" d="M255.94 511.99A256.003 256.003 0 00492.5 354a255.946 255.946 0 0014.58-147.91A255.993 255.993 0 00437.04 75 256.07 256.07 0 00305.97 4.92a256.064 256.064 0 00-147.92 14.56 255.926 255.926 0 00-114.9 94.29A256 256 0 000 256c0 33.61 6.61 66.9 19.47 97.96a255.843 255.843 0 0055.47 83.05 255.991 255.991 0 0083.04 55.5 255.902 255.902 0 0097.96 19.48z"/><path fill="#fff" d="M255.94 121.22c26.68-.03 52.76 7.85 74.96 22.64a134.84 134.84 0 0149.74 60.49 134.797 134.797 0 017.73 77.92 134.58 134.58 0 01-36.88 69.08 134.822 134.822 0 01-69.05 36.95 134.83 134.83 0 01-77.93-7.68 134.778 134.778 0 01-60.52-49.68A134.88 134.88 0 01121.27 256c.06-35.71 14.25-69.95 39.49-95.21a134.945 134.945 0 0195.18-39.57zm-49.42 210.43L337.45 256l-130.93-75.59v151.24zm49.42-231.05c-30.75 0-60.81 9.12-86.38 26.2a155.438 155.438 0 00-57.25 69.78 155.413 155.413 0 00-8.84 89.82 155.524 155.524 0 0042.56 79.6 155.467 155.467 0 0079.62 42.53 155.43 155.43 0 0089.82-8.87 155.371 155.371 0 0069.75-57.28A155.408 155.408 0 00411.39 256c0-20.42-4.02-40.63-11.83-59.49a155.455 155.455 0 00-33.7-50.42 155.536 155.536 0 00-50.44-33.68 155.44 155.44 0 00-59.48-11.81z"/></g></svg>
+              </span>
+              <div class="link-text"><b>YouTube</b><span>Channel & video</span></div>
+            </div>
+            <svg class="chev" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div>Made with 🐨 + 🌿 in a single HTML file.</div>
+      <div>-</div>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Copied!</div>
+
+  <script>
+    (function(){
+      const root = document.body;
+      const btnTheme = document.getElementById("btnTheme");
+      const iconTheme = document.getElementById("iconTheme");
+      const btnCopy = document.getElementById("btnCopy");
+      const toast = document.getElementById("toast");
+
+      function showToast(msg){
+        toast.textContent = msg;
+        toast.classList.add("show");
+        clearTimeout(showToast._t);
+        showToast._t = setTimeout(()=> toast.classList.remove("show"), 1400);
+      }
+
+      async function copyText(text){
+        try{
+          await navigator.clipboard.writeText(text);
+          showToast("Copied to clipboard ✨");
+        }catch(e){
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          ta.setAttribute("readonly","");
+          ta.style.position = "fixed";
+          ta.style.top = "-9999px";
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          document.body.removeChild(ta);
+          showToast("Copied (fallback) ✅");
+        }
+      }
+
+      function setTheme(theme){
+        root.setAttribute("data-theme", theme);
+        localStorage.setItem("koalaTheme", theme);
+
+        if(theme === "light"){
+          iconTheme.innerHTML =
+            '<path d="M12 18a6 6 0 1 0 0-12 6 6 0 0 0 0 12Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>' +
+            '<path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>';
+        }else{
+          iconTheme.innerHTML =
+            '<path d="M21 12.2A8.2 8.2 0 1 1 11.8 3a6.7 6.7 0 0 0 9.2 9.2Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>';
+        }
+      }
+
+      const saved = localStorage.getItem("koalaTheme");
+      if(saved){ setTheme(saved); }
+
+      btnTheme.addEventListener("click", ()=>{
+        const current = root.getAttribute("data-theme") || "dark";
+        setTheme(current === "dark" ? "light" : "dark");
+      });
+
+      btnCopy.addEventListener("click", ()=> copyText(window.location.href));
+    })();
+  </script>
+</body>
+</html>
